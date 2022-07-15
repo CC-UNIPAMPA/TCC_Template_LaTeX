@@ -1,8 +1,8 @@
 # TCC_Template_LaTeX
 
-Este é um Template LaTeX do TCC preenchido, que pode ser utilizado como exemplo para o seu TCC.
+Este é um **Template LaTeX do TCC** preenchido, que pode ser utilizado como exemplo para o seu TCC.
 
-Você pode clonar o respositório e editar o template em sua máquina ou no [Overleaf](https://www.overleaf.com), por exemplo.
+Você pode **clonar o respositório e editar o template** em sua máquina ou no [Overleaf](https://www.overleaf.com), por exemplo.
 
 Clone o repositório em seu computador (exemplo terminal Linux): 
 ```
