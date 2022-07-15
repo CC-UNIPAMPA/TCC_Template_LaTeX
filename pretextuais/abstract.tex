@@ -1,0 +1,20 @@
+\begin{resumo}[Abstract]
+
+
+% Objetivo
+With the criticality of the lack of beds in the intensive care unit during the COVID-19 pandemic, policies to determine who has access to beds were implemented in Brazilian states. Aiming to mitigate the subjectivity of these policies, we propose the development and internal validation of a predictor for death risk classification of patients with COVID-19 in Rio Grande do Sul.
+% design do estudo
+We use the TRIPOD guideline to explain the development of the random forest-based machine learning model.
+% participantes e tamanho da amostra
+The dataset has 604,389 records and includes patients treated in Rio Grande do Sul who were reported through the Painel Coronavírus RS, in the period from January 1 to June 8, 2021.
+% variáveis preditoras e variável resposta
+The outcome variable is evolution, which informs whether the patient was recovered or died from COVID-19. In total, fourteen characteristics were listed as predictors, which were demographic (gender and age group) and clinical (symptoms and comorbidities). 
+% análises estatísticas, resultados
+The derivation dataset has 408,959 records, being 3.18\% (n=13,005) deaths, and the validation set has 175,269 records, being 5,574 deaths. In the test set, the model rated the chance of death with an AUC-ROC score of 0.981 (95\% confidence interval 0.981 to 0.982) and AUC-ROC of 0.970 in the validation set.
+% conclusões
+The classifier makes it possible to stratify with good precision the risk of death of patients with COVID-19 and can contribute to the reduction of subjectivity in decision-making in the hospital environment. However, we point out that this is just an additional tool, and all ethical and legal aspects must be considered in decision-making.
+ \vspace{\onelineskip}
+ 
+ \noindent
+ \textbf{Key-words}: Machine Learning. Patient Priorization. Risk Stratification. COVID-19 Prognosis.
+\end{resumo}

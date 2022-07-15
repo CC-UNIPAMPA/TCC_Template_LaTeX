@@ -1,0 +1,140 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{Estudo de Caso} \label{sec_estudo_de_caso}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+Como caso de estudo o município de Santa Maria, os dados utilizados para classificações e análise sobre COVID-19 são provenientes das plataformas governamentais e-SUS Notifica e SIVEP Gripe. 
+Essas plataformas são preenchidas manualmente por profissionais da saúde durante o exercício de suas atividades diárias. 
+Devido a esse fato, essas bases possuem inúmeras inconsistências e, em grande parte dos casos, não seguem as instruções publicadas pelo Ministério da Saúde \cite{instrutivoesus,instrutivosivep}. 
+Como consequência, as análises manuais desses dados tornam-se inviáveis, pois tendem a erros e possuem um custo operacional alto uma vez que os profissionais da área da saúde e epidemiologia não podem gastar o seu tempo na verificação da confiabilidade dos dados, validando cada registro individualmente.
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Fontes de dados}
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% esus notifica
+\subsection*{eSUS Notifica}
+
+Esta plataforma foi concebida pelo Ministério da Saúde (MS), por meio do Departamento de Informática do Sistema Único de Saúde (DataSUS), em 27 de março de 2020. O sistema, que foi desenvolvido para registro de casos de Síndrome Gripal (SG) suspeitos de COVID-19, objetiva auxiliar o trabalho de profissionais da saúde no controle e triagem dos casos, prometendo formulários simples, intuitivos e de fácil utilização. As unidades públicas e privadas devem reportar casos de síndrome gripal nesta plataforma. 
+A base tabular contém 53 colunas, incluindo dados sobre sintomas, comorbidades e dados demográficos.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\subsection*{SIVEP-Gripe} 
+O Ministério da Saúde (MS), por meio da Secretaria de Vigilância em Saúde (SVS), realiza a vigilância da Síndrome Respiratória Aguda Grave (SRAG) no Brasil, desde a pandemia de Influenza A (H1N1) em 2009. 
+% Esta vigilância foi implantada na rede de influenza e outros vírus respiratórios. 
+Recentemente, em 2020, o monitoramento da infecção humana causada pelo novo Coronavírus foi incorporada na rede de vigilância da influenza e outros vírus respiratórios. 
+O Sistema de Informação da Vigilância Epidemiológica da Gripe (SIVEP-Gripe) contém registros de pacientes hospitalizados sob suspeita (ou diagnóstico) que caracterizam quadros de alguma síndrome respiratória aguda grave. 
+Unidades de Vigilância Sentinela de Síndrome Gripal devem reportar casos seguindo fluxos estabelecidos pelo Ministério da Saúde.
+As unidades sentinelas de influenza são aquelas unidades ou serviços de saúde já implantados e cadastrados no Cadastro Nacional de Estabelecimentos de Saúde (CNES) e no SIVEP-Gripe, que atuam na identificação, notificação, investigação e diagnóstico de casos suspeitos e confirmados. 
+Todos os hospitais públicos ou privados devem reportar casos de SRAG que estão hospitalizados. 
+A base de dados é estruturada e contém 73 colunas, incluindo dados sobre sintomas, comorbidades e dados demográficos (anonimizados). 
+Essa base possui valores categóricos como ``números mágicos'', onde um número corresponde a uma característica descrita em um dicionário de dados.
+
+Antes de começar o processo de limpeza descrito no presente trabalho, é necessário fazer uma união dos dados e-SUS Notifica e SIVEP-Gripe. 
+%Esta união é um ponto importante para o trabalho de limpeza, normalização e processamento dos dados para contagem de casos e identificação de inconsistências. 
+Como casos confirmados no e-SUS Notifica podem evoluir e agravar-se, resultando em hospitalizações, estes passam a ser reportados e atualizados apenas no SIVEP-Gripe. 
+Além disso, há os casos de hospitalizações diretas, ou seja, que não passaram pelo e-SUS Notifica. 
+Estes exemplos ilustram a necessidade de união dos dados de ambas as bases para realizar uma análise completa e detalhada dos casos suspeitos ou confirmados de COVID-19 no município.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Inconsistências nos dados} \label{subsec_incons_dados}
+
+% problema na alimentação das bases
+Embora vários instrutivos tenham sido publicados por meio dos canais de comunicação do MS, os frequentes atendimentos emergenciais acarretam em registros de notificação sendo parcialmente preenchidos, muitas vezes não dispondo os dados requeridos do paciente atendido (\textit{e.g.} falta da data do início dos sintomas, mesmo sintomáticos). Alguns registros de pacientes não são únicos, existe duplicidade no cadastro de atendimento no e-SUS Notifica, pois um mesmo paciente pode ser atendido por dois recepcionistas e cada um gera um registro distinto, com identificador diferente. Ou também, há registros de um mesmo paciente em datas diferentes, caracterizando mais de um episódio de suspeitas. Com o entendimento disso, é sabido que para a contagem de confirmação, exclusão ou óbito de um caso, apenas um registro deste paciente é suficiente (ver Seção \ref{subsec_limpeza}).
+
+% Dados ausentes
+As duas principais bases de dados governamentais apresentam desafios estatísticos significativos para o  município de Santa Maria. 
+Por exemplo, a ausência de informações (\textit{e.g.} data da coleta da amostra e sintomas do paciente) e as inconsistências de dados (\textit{e.g.} data do início dos sintomas posterior ao resultado do teste) podem comprometer a validade dos resultados e levar a análises equivocadas. 
+
+% motivos dos dados ausentes
+A falta de dados, que podem ser expressivos na análise, pode ter diferentes causas, como a falta de coleta real (\textit{e.g.}, paciente nunca ter sido questionado sobre histórico de asma) ou por falta de coleta devido à atendimentos emergenciais (\textit{e.g.,} paciente foi questionado sobre asma, mas a resposta nunca foi registrada no prontuário). 
+Alguns profissionais da saúde reclamam que uma documentação eletrônica discreta mais completa requer trabalho adicional; às vezes sem benefícios imediatos ou óbvios para o atendimento ao paciente. 
+Estudos apontam que este é um dos principais motivos da falta de dados ou documentação relacionada à pacientes que não apresentam o sintoma, comorbidade ou situação \cite{wells2013strategies}. 
+Ao invés de registrar um valor negativo no sistema, os profissionais da saúde simplesmente omitem a informação e registram apenas os positivos.
+    
+% problemas em dados textuais
+As bases e-SUS Notifica e SIVEP-Gripe possuem diversos dados estruturados, muitos deles representados como valores numéricos ou discretos (\textit{i.e.}, categoria pré-definida), e também dados textuais.
+Enquanto que os campos numéricos são fáceis de processar automaticamente, os campos com dados textuais (\textit{e.g.}, nota sobre outros sintomas ou condições descrito pelo médico) são difíceis de analisar quantitativamente devido as variações da expressão humana, erros gramaticais, uso de siglas, abreviações e jargões, e o potencial para diferentes interpretações da mesma frase dependendo do contexto.
+
+% problema específico
+Resumidamente, os campos textuais das duas bases possuem informações ambíguas em relação a campos estruturados referentes a condições, comorbidades e sintomas (ver Seção \ref{subsec_limpeza}). 
+Por exemplo, há um campo onde os profissionais da saúde podem descrever sintomas diferentes dos destacados nos sistemas. 
+Porém, em alguns casos, como febre e tosse, os campos específicos dos sintomas estão sendo ignorados e o registro está sendo realizado no campo descritivo geral.
+
+% correção
+Abordar adequadamente o problema dos dados ausentes nos registros eletrônicos de saúde é uma tarefa complicada pelo fato de ser frequentemente difícil diferenciar entre dados ausentes e um valor realmente negativo. 
+Um exemplo é um caso documentado como não apresentando dispneia. 
+É difícil saber se o paciente não apresentou o sintoma ou se o prestador de serviço hospitalar simplesmente não documentou o episódio. 
+Para mitigar a perda de dados nesse tipo de sistemas, existem diferentes abordagens, como o aumento da documentação de dados estruturados, a redução de erros de entrada de dados através de interfaces mais elaboradas e a utilização de análise automatizada de texto \cite{wells2013strategies} (adotada no presente trabalho). 
+
+\begin{figure}[ht]
+\caption{Quadro de Síndrome Gripal}
+\centering % para centralizarmos a figura
+\includegraphics[width=12cm]{figuras/quadro_sg.png}
+\label{figura_sg}
+\end{figure}
+    
+\begin{figure}[ht]
+\caption{Quadro de Síndrome Respiratória Aguda Grave}
+\centering % para centralizarmos a figura
+\includegraphics[width=12cm]{figuras/quadro_srag.png}
+\label{figura_srag}
+\end{figure}
+    
+As Figuras \ref{figura_sg} e \ref{figura_srag} representam os algoritmos definidos pelo Ministério da Saúde que caracterizam um caso como SG ou SRAG \cite{definicaoMinisterioSaudeSG}.
+O entendimento destes algoritmos é necessário para a compreensão das características que devem ser analisadas a fim de encontrar incoerências com a definição do próprio MS. 
+Um aspecto a observar é que não existem campos correspondentes aos sintomas batimentos de asa de nariz, cianose, tiragem intercostal, desidratação, inapetência, dor de cabeça, distúrbio olfativo, distúrbio gustativo, obstrução nasal, síncope, confusão mental, sonolência, diarreia, dispneia/desconforto respiratório, pressão torácica e dessaturação, que são necessários para a categorização do caso como SG ou SRAG. 
+Isto significa que é necessário minerar os textos de descrição de sintomas para extrair essas informações de sintomas específicos.
+    
+\begin{figure}[ht]
+    \caption{Fluxo esperado e obtido de evolução de casos}
+    \centering % para centralizarmos a figura
+    \includegraphics[width=12cm]{figuras/fluxo_de_evolucaocaso.png}
+    \label{figura_evolucao_caso}
+\end{figure} % 
+
+A Figura \ref{figura_evolucao_caso} resume o comportamento esperado de evolução dos casos. 
+Como pode ser observado, o fluxo representa o senso comum sobre a evolução de doenças como a causada pelo vírus Sars-CoV-2 (vírus causador da COVID-19). 
+Entretanto, durante a pandemia e devido a fatores já mencionados, foram constatadas discrepâncias significativas nas bases governamentais (como pode ser observado nas setas pontilhadas em laranja na figura), o que pode levar a resultados equivocados sobre a evolução dos casos de COVID-19. Algumas das discrepâncias encontradas nos dados das bases governamentais, são detalhadas a seguir.
+
+\begin{itemize}
+
+       \item Foram encontrados casos que evoluíram para `Ignorado', porém, no registro de resultado do teste apontava para `Positivo';
+        \item Foram encontrados casos que evoluíram para `Cura' ou `Óbito', mas sem resultado do teste ou com resultado do teste apontando para `Negativo';
+        \item Foram encontrados casos de pessoas que evoluíram para `Em Tratamento Domiciliar', porém, com resultado do teste apontando para `Negativo';
+        \item Inconsistências observadas em casos descartados, considerando que alguns deles evoluíram para `Óbito', `Cura' ou `Em Tratamento Domiciliar', comportamento este considerado anormal, visto que todos possuem resultado do teste apontando para `Negativo'. Isto ocorre também devido ao fato de o resultado do teste `Negativo' no SIVEP-Gripe poder significar negatividade para Influenza, mas não para COVID-19.
+        
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section{Desafios}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ % DESAFIO DE CONTEXTO
+\subsubsection*{De contexto}
+
+Um dos obstáculos iniciais do projeto foi compreender o contexto. 
+Por se tratarem de dados relacionados à saúde, a compreensão sobre jargões ou nomes técnicos sobre sintomas, comorbidades ou doenças tem um impacto significativo na manipulação dos dados. 
+Um exemplo prático é o nome da popularmente conhecida ``dor-de-cabeça'', que em contexto médico, é denominada cefaleia. 
+Um segundo exemplo são os termos sobre distúrbios que não eram previamente conhecidos pelos autores, como ageusia e anosmia -- distúrbios gustativos e olfativos, respectivamente. 
+Além disso, há diversos outros nomes técnicos sobre tipos de testes, como os de critério laboratorial: Ensaio imunoenzimático (ELISA), Imunocromatografia (teste rápido),  e Imunoensaio por Eletroquimioluminescência (ECLIA). 
+Como um último exemplo, existem termos de contexto que não são comuns aos profissionais alheios à área da saúde, como ``Detectável'' ou ``Reagente'', que significam resultado positivo para algum agente etiológico (\textit{i.e.} positivo para alguma SG ou SRAG). 
+\textit{Detectável} diz respeito aos testes por biologia molecular, onde o entendimento sobre os tipos de sorologias precisam ser estudados e compreendidos.
+Por outro lado, \textit{reagente} remete a testes imunológicos e testes de pesquisa de antígeno (rápidos). Para o entendimento desses testes, conhecimentos sobre as imunoglobulinas (IgM, IgG e IgA) -- que são anticorpos que aparecem após um tempo do agente etiológico no corpo do paciente -- tiveram que ser estudados. 
+
+ 
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+% DESAFIO DE COMUNICAÇÃO
+\subsubsection*{De comunicação}
+
+Como a equipe de epidemiologia estava sob pressão contínua devido à pandemia em curso, houve uma dificuldade de manutenção de diálogos frequentes, o que levou a atrasos e contratempos relacionados a compreensão dos detalhes específicos do contexto. 
+Frequentemente, a tarefa de comunicar as mudanças feitas na plataforma para os interessados em sua utilização era bastante desafiadora, considerando a inevitabilidade da utilização de termos técnicos específicos da computação e o debate acerca das reais necessidades da equipe epidemiológica de Santa Maria. Já que esse é um problema crítico, decisões rápidas sobre soluções tiveram de serem tomadas, e por isso vários problemas só foram compreendidos em um estágio relativamente avançado do trabalho, sendo necessário, por vezes, uma reunião com todas as partes interessadas com o objetivo de redefinir o escopo.
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+ % desafio tecnico de mudança nas bases
+\subsubsection*{Técnicos}
+
+Por se tratarem de sistemas em homologação, como é o caso do e-SUS Notifica, ou adaptados a um novo contexto, como é o caso do SIVEP-Gripe, essas plataformas estiveram em constante evolução no panorama criado pela pandemia. 
+Como a plataforma SIVEP-Gripe foi desenvolvida para registrar casos de alguma SRAG, possuir o dado de ``positivo'' para resultado do teste não caracteriza confirmação para COVID-19, mas sim que houve a confirmação para algum agente etiológico (\textit{e.g.}, Influenza). 
+Outro aspecto a ser observado é que, em algumas versões, o fato da negativação para o resultado do teste apenas informava que o paciente testou negativo para Influenza, mas ainda poderia ter resultado positivo para COVID-19. 
+Como consequência, campos extras começaram a ser adicionados aos sistemas no decorrer da pandemia. 
+Durante o desenvolvimento deste trabalho, três mudanças na forma de organizar os dados nos sistemas e-SUS Notifica e SIVEP-Gripe ocorreram, o que resultou em re-trabalho de limpeza de dados e extração de informações.

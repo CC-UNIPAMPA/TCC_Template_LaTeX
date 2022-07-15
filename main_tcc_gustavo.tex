@@ -1,0 +1,419 @@
+%% monografia.tex, fabiokepler, jeancheiran
+%% Copyright 2012-2018 by UNIPAMPA LaTeX group at https://bitbucket.org/  unipampaalegrete/monografias-cc-es-repo/
+%%
+%% This work may be distributed and/or modified under the conditions of the LaTeX Project Public
+%% License, either version 1.3 of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX version 2005/12/01 or later.
+%%
+%% Based on the example file abtex2-modelo-trabalho-academico.tex of the abntex2 package
+%% (http://abntex2.googlecode.com/) and on the ppgccufmg 1.45beta2 class
+%% (http://vilarneto.com/ppgccufmg,
+%% http://www.dcc.ufmg.br/pos/alunos/modelodisstese.php
+%% and http://www.dcc.ufmg.br/~mirella).
+%%
+%% Adapted for the Computer Science program at UNIPAMPA (http://www.unipampa.edu.br)
+%% by Fabio Kepler (fabio@kepler.pro.br) and Jean Cheiran (jeancheiran@unipampa.edu.br).
+%%
+%% Version 2.5 - 2018/08
+%% Version 2.4 - 2017/05
+%% Version 2.3 - 2013/03
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% Este modelo utiliza o pacote abnTeX2. Veja como instalá-lo em seu ambiente em
+% http://abntex2.googlecode.com/.
+% -------------------------------------------------------------------------------------------------
+% abnTeX2: Modelo de Trabalho Acadêmico (tese de doutorado, dissertação de
+% mestrado e trabalhos monográficos em geral) em conformidade com
+% ABNT NBR 14724:2011: Informação e documentação - Trabalhos acadêmicos -
+% Apresentação
+% -------------------------------------------------------------------------------------------------
+% Normas institucionais utilizadas:
+% http://porteiras.r.unipampa.edu.br/portais/sisbi/programa-de-capacitacao/
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+\documentclass[12pt,openright,twoside,a4paper,chapter=TITLE]{abntex2}    % frente e verso
+%\documentclass[12pt,oneside,a4paper]{abntex2}            % apenas frente
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% PACOTES
+% -------------------------------------------------------------------------------------------------
+% Pacotes fundamentais
+\usepackage{cmap}           % Mapeamento de caracteres especiais no PDF
+\usepackage{lmodern}        % Usa fonte Latin Modern
+\usepackage[T1]{fontenc}    % Seleção de codificação de fonte
+\usepackage[utf8]{inputenc} % Codificação do arquivo (conversão automática dos acentos)
+\usepackage[brazil]{babel}  % Idioma para hifenização e tradução de vários elementos
+\usepackage{makeidx}        % Criação de índice
+\usepackage{hyperref}       % Formatação do índice
+\usepackage{lastpage}       % Usado pela Ficha catalográfica
+\usepackage{indentfirst}    % Indenta o primeiro parágrafo de cada seção
+\usepackage[usenames,dvipsnames]{xcolor}  % Controle das cores (com nomes)
+\usepackage{graphicx}       % Inclusão de gráficos
+\usepackage{booktabs}       % Formatação de tabelas
+% -------------------------------------------------------------------------------------------------
+% Para citações
+\usepackage[brazilian,hyperpageref]{backref} % Páginas com as citações na bibliografia
+\usepackage[alf,abnt-emphasize=bf]{abntex2cite} % Citações padrão ABNT (alfanumérico)
+% -------------------------------------------------------------------------------------------------
+% Pacotes opcionais
+\usepackage{nomencl}        % Para criar uma lista de símbolos
+\usepackage{acro}           % Para usar acrônimos e abreviaturas
+\usepackage{tikz}           % Para fazer figuras, diagramas e gráficos integrados e elegantes
+\usepackage{pgfplots}       % Usa o pacote tikz para fazer gráficos muito melhores que os do Excel
+\usepackage{pgfplotstable}  % Para gerar tabelas automaticamente a partir de arquivos com dados
+\usepackage{filecontents}   % Para colocar o conteúdo de um arquivo dentro de um arquivo tex
+\usepackage{todonotes}      % Para criar anotações durante o desenvolvimento do texto
+%\usepackage{multirow}       % Permite fazer tabelas com múltiplas linhas
+\let\newfloat=\undefined    % Workaround para usar o pacote algorithm
+%\usepackage{algorithm}      % Para escrever algoritmos
+%\usepackage{clrscode}       % Para escrever algoritmos
+%\usepackage{clrscode3e}     % Para escrever algoritmos; mais simples que os pacotes acima
+\usepackage{pdfpages}        % Para incluir a folha de aprovação assinada em PDF
+
+%----
+% marcar a data
+\usepackage{fancyhdr}
+\usepackage[us,12hr]{datetime} % `us' makes \today behave as usual in TeX/LaTeX
+\fancypagestyle{plain}{
+\fancyhf{}
+%\rfoot{Compiled on {\ddmmyyyydate\today} at \currenttime}
+\lfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0pt}}
+\pagestyle{plain}
+
+
+%-------------------------------------------------------------------------------------------------
+% meus pacotes
+\usepackage{breakcites}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{multirow}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+\usepackage{color}
+\usepackage{longtable}
+\usepackage[hide]{chato-notes}
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\usepackage[]{appendix}%
+
+% -------------------------------------------------------------------------------------------------
+% Configurações de pacotes
+% -------------------------------------------------------------------------------------------------
+\addto\captionsbrazil{
+  \renewcommand{\listfigurename}{Lista de figuras}
+}
+% -------------------------------------------------------------------------------------------------
+% Configurações do pacote backref
+% Usado sem a opção hyperpageref de backref
+\renewcommand{\backrefpagesname}{Citado na(s) página(s):~}
+% Texto padrão antes do número das páginas
+\renewcommand{\backref}{}
+% Define os textos da citação
+\renewcommand*{\backrefalt}[4]{
+    \ifcase #1 %
+        Nenhuma citação no texto.%
+    \or
+        Citado na página #2.%
+    \else
+        Citado #1 vezes nas páginas #2.%
+    \fi}%
+    
+\newcommand{\standalone}[0]{\textit{standalone}\xspace}
+% -------------------------------------------------------------------------------------------------
+% Configurações de aparência do PDF final
+%\definecolor{blue}{RGB}{41,5,195}
+% \definecolor{webgreen}{rgb}{0,.5,0}
+% Metainformações do PDF e cores dos links
+\hypersetup{
+  portuguese,
+  %backref=true,
+  %pagebackref=true,
+  %bookmarks=true,             % show bookmarks bar?
+  %bookmarksnumbered=true,
+  bookmarksdepth=4,
+  pdftitle={\@title},
+  pdfauthor={\@author},
+  pdfsubject={\imprimirpreambulo},
+  pdfkeywords={UNIPAMPA}{Computação}{UNIPAMPA}{abntex}{TCC},
+  %pdfproducer={LaTeX with abnTeX2},     % producer of the document
+  pdfcreator={\@author},
+  colorlinks=true,           % false: boxed links; true: colored links
+  linkcolor=black,            % color of internal links
+  citecolor=black,            % color of links to bibliography
+  filecolor=black,         % color of file links
+  urlcolor=black
+}
+%   linktocpage,
+%   colorlinks,
+%   citecolor=webgreen,
+%   urlcolor=Maroon,
+%   linkcolor=RoyalBlue,
+%   filecolor=black,
+% -------------------------------------------------------------------------------------------------
+% Espaçamentos entre linhas e parágrafos
+% O tamanho do parágrafo é dado por
+\setlength{\parindent}{1.3cm}
+% Controle do espaçamento entre um parágrafo e outro
+\setlength{\parskip}{0.2cm} % tente também \onelineskip
+% Controles do espaçamento entre linhas
+%\OnehalfSpacing       % espaçamento um e meio (padrão);
+%\DoubleSpacing        % espaçamento duplo
+%\SingleSpacing        % espaçamento simples
+% -------------------------------------------------------------------------------------------------
+% Para o pacote de acrônimos
+\acsetup{hyperref=true,index=true} %first-style=short}
+% -------------------------------------------------------------------------------------------------
+% Para o pacote tikz, pgfplots e pgfplotstable
+\usetikzlibrary{arrows,chains,matrix,positioning,decorations.pathreplacing,calc}
+% -------------------------------------------------------------------------------------------------
+% Para poder usar subfiguras e subtabelas
+\newsubfloat{figure}
+\newsubfloat{table}
+\providecommand*{\subfigureautorefname}{\figureautorefname}
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+%===========================================================
+% REVIEW COMMANDS
+\newcommand{\missingcite}[1]{\textcolor{red}{[FALTA REF ou é BOM USAR UMA REF] #1}} % when you don't have the reference
+\newcommand{\missingexamples}[1]{\textcolor{red}{[FALTA EXEMPLO] #1}} % when you don't have the reference
+\newcommand{\missingthings}[1]{\textcolor{red}{[FALTA CONTEUDO] #1}} % when you don't have the reference
+
+
+\newcommand{\blue}[1]{\textcolor{black}{#1}} % blue: improved writing
+\newcommand{\purple}[1]{\textcolor{black}{#1}} % purple: answering reviews' comments
+\newcommand{\red}[1]{\textcolor{black}{#1}} % red: hard to understand 
+\newcommand{\magenta}[1]{\textcolor{black}{#1}} %magenta: needs to be checked (e.g. references, writing, etc.)
+
+\newcommand{\gray}[1]{\textcolor{gray}{#1}} % proposed
+\newcommand{\writingissue}[1]{\textcolor{red}{[WRITING ISSUE?] #1}} % to be removed
+\newcommand{\DK}[1]{\textcolor{orange}{DK: #1}} % Kreutz
+\newcommand{\omite}[1]{}
+
+\newcommand{\covid}[1]{COVID-19}
+
+
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% Informações de dados para CAPA e FOLHA DE ROSTO
+% -------------------------------------------------------------------------------------------------
+\titulo{Modelo preditivo para prognóstico de pacientes com COVID-19}
+\autor{Gustavo Cardozo Rodrigues}
+\local{Alegrete}
+\data{2021}
+\orientador{Prof. Dr. Diego Kreutz}
+\coorientador{Prof. Dr. Mirkos Ortiz Martins} % Se houver
+\instituicao{Universidade Federal do Pampa}
+%\tipotrabalho{Projeto de Trabalho de Conclusão de Curso~} % Para TCC I
+\tipotrabalho{Trabalho de Conclusão de Curso~} % Para TCC II
+% O preambulo deve conter o tipo do trabalho, o objetivo, o nome da instituição e a área de concentração
+\preambulo{\imprimirtipotrabalho apresentado ao Curso de Graduação em Ciência da
+           Computação da Universidade Federal do Pampa como requisito parcial para a obtenção do
+           título de Bacharel em Ciência da Computação.}
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+% -------------------------------------------------------------------------------------------------
+% Compila o indice
+\makeindex
+% Compila a lista de abreviaturas e siglas
+% Para funcionar, o seguinte comando deve ser executado:
+% makeindex ARQUIVO_PRINCIPAL.nlo -s nomencl.ist -o ARQUIVO_PRINCIPAL.nls
+\makenomenclature
+% -------------------------------------------------------------------------------------------------
+
+% -------------------------------------------------------------------------------------------------
+% Abreviaturas (definido pelo parâmetro 'class')
+\DeclareAcronym{fig}{
+  short = Fig.,
+  long  = Figura,
+  class = abreviaturas
+}
+% -------------------------------------------------------------------------------------------------
+% Acrônimos/Siglas (definido pelo parâmetro 'class')
+\DeclareAcronym{tcc}{
+  short = TCC,
+  long  = Trabalho de Conclusão de Curso,
+  long-plural-form = Trabalhos de Conclusão de Curso,
+  class = acronimos
+}
+% -------------------------------------------------------------------------------------------------
+% Nomenclaturas/Símbolos
+\nomenclature{$A_i$}{Área do $i^{esimo}$ componente}
+\nomenclature{456}{Isto é um número}
+\nomenclature{123}{Isto é outro número}
+\nomenclature{$n$}{Tamanho da entrada}
+\nomenclature{$V$}{Vetor de elementos}
+\nomenclature{$\mathcal{T}$}{Conjunto de trabalhos de TCC}
+
+% -------------------------------------------------------------------------------------------------
+% Inclui alguns ajustes finos para que fique de acordo com o Manual de Normatização
+\include{consertos}
+
+
+% *************************************************************************************************
+\begin{document}
+% *************************************************************************************************
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% ELEMENTOS PRÉ-TEXTUAIS
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% \pretextual
+
+% -----------------------------------------------
+% Capa [OBRIGATÓRIO]
+% -----------------------------------------------
+%Compiled on {\ddmmyyyydate\today} at \currenttime
+\imprimircapa
+% -----------------------------------------------
+% Folha de rosto [OBRIGATÓRIO]
+% -----------------------------------------------
+% (ver documentação do abntex2 caso seja necessário haver ficha catalográfica)
+\imprimirfolhaderosto
+
+% -----------------------------------------------
+% Folha de aprovação [OBRIGATÓRIO]
+% -----------------------------------------------
+% Veja alguns detalhes no arquivo.
+\input{pretextuais/folhadeaprovacao}
+
+% -----------------------------------------------
+% Dedicatória [OPCIONAL]
+% -----------------------------------------------
+\input{pretextuais/dedicatoria}
+
+% -----------------------------------------------
+% Agradecimentos [OPCIONAL]
+% -----------------------------------------------
+\input{pretextuais/agradecimentos}
+
+% -----------------------------------------------
+% Epígrafe [OPCIONAL]
+% -----------------------------------------------
+\input{pretextuais/epigrafe}
+
+% -----------------------------------------------
+% Resumo [OBRIGATÓRIO]
+% -----------------------------------------------
+\input{pretextuais/resumo}
+
+% -----------------------------------------------
+% Abstract (resumo em inglês) [OBRIGATÓRIO]
+% -----------------------------------------------
+\input{pretextuais/abstract}
+
+% Resumo estendido [OPCIONAL]
+% \input{pretextuais/resumoest}
+
+% -----------------------------------------------
+% Listas
+% -----------------------------------------------
+% Figuras/Ilustrações [OPCIONAL]
+%\pdfbookmark[0]{\listfigurename}{lof}
+%\listoffigures*
+%\cleardoublepage
+% -----------------------------------------------
+% Tabelas [OPCIONAL]
+%\pdfbookmark[0]{\listtablename}{lot}
+%\listoftables*
+%\cleardoublepage
+% -----------------------------------------------
+% Abreviaturas [OPCIONAL] (veja o pacote acro e os exemplo acima)
+%\newcommand{\lobname}{Lista de abreviaturas}
+%\pdfbookmark[0]{\lobname}{lob}
+%\printacronyms[include-classes=abreviaturas,name=\lobname,heading=chapter*]
+%\cleardoublepage
+% -----------------------------------------------
+% Siglas [OPCIONAL] (veja o pacote acro e os exemplo acima)
+%\newcommand{\loaname}{Lista de siglas}
+%\pdfbookmark[0]{\loaname}{loa}
+%\printacronyms[include-classes=acronimos,name=\loaname,heading=chapter*]
+%\cleardoublepage
+% -----------------------------------------------
+% Símbolos [OPCIONAL] (veja o pacote nomencl e os exemplo acima)
+%\renewcommand{\nomname}{Lista de símbolos}
+%\pdfbookmark[0]{\nomname}{los}
+%\printnomenclature
+%\cleardoublepage
+
+
+% -----------------------------------------------
+% Sumário
+% -----------------------------------------------
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% -----------------------------------------------
+
+\begin{comment}
+  %cutter={M1234x}, % INFORMAÇÃO QUE VAI NA FICHA CATALOGRÁFICA
+  %cdu={100.0*01.10},  % Define o identificador CDU do documento, fornecido pela Secretaria do Curso (verificar se é necessário).
+  keywords={Modelo de texto, UNIPAMPA, Latex}, % Define as palavras-chave que deverão constar na Ficha Catalográfica, separadas por vírgulas.
+  firstcommitteemember={Nome membro da banca 1\\ UNIPAMPA},
+  secondcommitteemember={Nome membro da banca 2\\ Instituição},
+\end{comment}
+
+
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% ELEMENTOS TEXTUAIS
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% É possível usar \textual ou \mainmatter, que é a macro padrão do memoir.
+\textual
+
+% Você pode dividir o seu texto em vários arquivos. Por exemplo, um para cada seção principal do
+% trabalho: introducao.tex, relacionados.tex, metodologia.tex, experimentos.tex, conclusao.tex.
+\input{textuais/introducao} % [OBRIGATORIO]
+%\part{Revisão de Literatura} % Pode-se usar partes para organizar os capítulos
+\input{textuais/contextualizacao}
+
+%\input{textuais/trabalhos_relacionados.tex}
+
+%\input{textuais/estudo_de_caso}
+
+%\part{Resultados}
+%\input{textuais/outrospontos} % Outro capítulo
+%\bookmarksetup{startatroot} % Usar se o próximo capítulo não pertencer à parte anterior e não existir uma parte nova
+
+\input{textuais/metodologia}
+
+\input{textuais/resultados}
+
+%\input{textuais/conclusao} % [OBRIGATORIO]
+
+\input{textuais/discussao}
+
+
+
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+% ELEMENTOS PÓS-TEXTUAIS
+% +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+\postextual
+
+% -----------------------------------------------
+% Bibliografia [OBRIGATORIO]
+% -----------------------------------------------
+% Nome(s) do(s) arquivo(s) .bib (sem a extensão)
+\bibliography{referencias}
+
+% -----------------------------------------------
+% Apêndices [OPCIONAL]
+% -----------------------------------------------
+\input{postextuais/apendices}
+
+% -----------------------------------------------
+% Anexos [OPCIONAL]
+% -----------------------------------------------
+%\input{postextuais/anexos}
+
+% -----------------------------------------------
+% Índice Remissivo [OPCIONAL]
+% -----------------------------------------------
+% Veja o pacote makeindex para mais informações
+\printindex
+
+
+\end{document}

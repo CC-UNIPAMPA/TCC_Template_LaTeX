@@ -1,0 +1,22 @@
+%==============================================================================
+\chapter{Discussão}\label{sec_discussao}
+%==============================================================================
+
+\section{Limitações}
+\red{Este estudo possui pelo menos quatro limitações. Primeiramente, alguns dos maiores preditores laboratoriais utilizados na construção de modelos prognósticos (\textit{i.e.}, proteína C-reativa e nível de linfócitos no sangue \cite{wynants2020prediction}) não estão disponíveis no Painel Coronavírus RS, e por isso fomos impossibilitados de utilizar neste trabalho. Acreditamos que elas podem ajudar a construir um modelo com maior poder preditivo.}
+
+%\red{Segundo, analizamos os dados de apenas um estado da região sul do Brasil. Por isso, estudos contendo populações de toda a região sul, e comparações com a população inteira do país devem ser realizados a fim de testar a capacidade de generalização do modelo.}
+
+\red{Segundo, a metodologia de treinamento do modelo adotada é denominada ``aprendizado \textit{offiline}'', onde o nosso conjunto de dados é estático, ou seja, a quantidade de observações corresponde a um intervalo de tempo bem definido. Para mitigar o problema relacionado a possíveis mudanças devido a novas cepas e mutações do vírus, técnicas como o ``aprendizado \textit{online}'' podem ser abordadas e comparadas com a solução do presente trabalho. Esta outra abordagem de aprendizado consiste em treinar o modelo à medida em que novos dados são gerados.}
+
+É importante salientar também, que analisamos os dados como sendo registros de pacientes únicos. Isto ocorre devido aos dados de reinfecção não estarem disponíveis no Painel Coronavírus RS e implica que eventuais casos de reinfecção foram ignorados. \purple{E por fim, como utilizamos apenas um algoritmo de aprendizagem de máquina no processo, em pesquisas futuras outros métodos de análise preditiva podem ser utilizados para comparar com o desempenho do algoritmo de florestas aleatórias.}
+
+%\section{Interpretação}
+%A Figura \ref{figura_geral} mostra o processo geral para o uso do modelo proposto.
+
+
+\section{Conclusões e implicações políticas}
+
+\red{Desenvolvemos e validamos internamento um classificador que permite estratificar com precisão o risco de óbito de pacientes com COVID-19. O modelo preditivo proposto pode contribuir para a diminuição da subjetividade na tomada de decisão, para que o profissional de saúde possa tomar suas decisões baseadas não somente no empirismo, mas também em um parâmetro técnico dentro do ambiente hospitalar. O código e os dados estão disponíveis no repositório no GitHub: \url{https://github.com/gustavocrod/predict_death_covid}. Entretanto, salientamos que os aspectos éticos e legais devem ser considerados no momento em que os profissionais tomam a decisão, ou seja, esta é apenas uma ferramenta adicional que pode auxiliar no processo de tomada de decisão e não substitui a expertise médica.}
+
+

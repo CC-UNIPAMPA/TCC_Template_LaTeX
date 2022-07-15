@@ -1,0 +1,20 @@
+\begin{resumo}
+
+% Objetivo
+Com a criticidade da falta de leitos de unidade de terapia intensiva durante a pandemia de COVID-19, políticas para determinar quem tem acesso aos leitos foram implantadas em estados do Brasil. Objetivando mitigar a subjetividade dessas políticas, propomos o desenvolvimento e validação interna de um preditor para classificação de risco de óbito de pacientes com COVID-19 no estado do Rio Grande do Sul.
+% design do estudo
+Utilizamos o guia TRIPOD para explanar o desenvolvimento do modelo de aprendizagem de máquina baseado em floresta aleatória.
+% participantes e tamanho da amostra
+O conjunto de dados possui 604.389 registros e engloba os pacientes atendidos no Rio Grande do Sul que foram reportados através do Painel Coronavírus RS, no perído de 01 de janeiro à 08 de junho de 2021.
+% variáveis preditoras e variável resposta
+A variável de desfecho (\textit{outcome}) é a evolução, que informa se o paciente foi recuperado ou veio a falecer por COVID-19. No total, quatorze características foram elencadas como preditoras, sendo elas demográficas (sexo e faixa etária) e clínicas (sintomas e comorbidades). 
+% análises estatísticas, resultados
+O conjunto de dados de derivação possui 408.959 registros, sendo 3,18\% (n=13.005) óbitos, e o conjunto de validação possui 175.269 registros, sendo 5.574 óbitos. No conjunto de testes, o modelo classificou a chance de óbito com uma pontuação AUC-ROC de 0,981 (intervalo de confiança  de 95\% 0,981 a 0,982) e AUC-ROC de 0,970 no conjunto de validação.
+% conclusões
+O classificador permite estratificar com boa precisão o risco de óbito de pacientes com COVID-19 e pode contribuir na dimuinição da subjetividade na tomada de decisão no ambiente hospitalar. Entretanto, salientamos que esta é apenas uma ferramenta adicional, e todos os aspectos éticos e legais devem ser considerados na tomada de decisão médica.
+\vspace{\onelineskip}
+
+    
+ \noindent
+ \textbf{Palavras-chave}: Aprendizado de Máquina. Priorização de Pacientes. Classificação de Risco. Prognóstico COVID-19.
+\end{resumo}

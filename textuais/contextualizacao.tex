@@ -1,0 +1,93 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\chapter{Estado da arte} \label{sec_classificacao_de_risco}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+\blue{Nesta seção é apresentado o estado da arte do aprendizado de máquina aplicado ao combate da pandemia. Aprendizagem de Máquina é um ramo da Inteligência Artificial onde sistemas computacionais podem aprender a partir de dados e identificar padrões com o mínimo de intervenção humana \cite{mitchell1997machine}. A Tabela \ref{tab_trabalhos_relacionados} apresenta o resumo de métodos de aprendizagem de máquina, métricas de avaliação e características aplicadas ao contexto da pandemia de COVID-19.
+Os métodos identificados tem por objetivo auxiliar na tomada de decisão médica, incluindo prever a severidade dos casos confirmados (classificação de risco), chance de óbito ou recuperação, e chance de internação em UTI.}
+
+\blue{Segundo os dados coletados, o método Floresta Aleatória é o mais frequentemente utilizado (aparece em 80\% dos casos).  Isto ocorre devivo ao fato deste método ser considerado acurado e robusto pois conta com um alto número de árvores de decisão no processo de treinamento, por não sofrer com sobreajuste e pelo seu auxílio na classificação da importância das características \cite{breiman2001random}. Devido às características mencionadas, utilizamos este algoritmo no processo de desenvolvimento do modelo preditivo para classificação de risco de mortalidade de pacientes com COVID-19.}
+
+\begin{table}[!htb]  \footnotesize
+\centering
+\caption{Métodos de aprendizagem de máquina, métricas de avaliação e características}
+\label{tab_trabalhos_relacionados}
+\begin{tabular}{| p{4.0cm} | p{4.3cm} | p{2.5cm} | p{3.7cm} | }
+\hline\hline
+&
+  \textbf{Métodos de aprendizagem de máquina usados} &
+  \textbf{Características} &
+  \textbf{Métricas de avaliação} \\ \hline
+
+  
+\textbf{\cite{iwendi2020covid}} & Floresta Aleatória* Intensificada (AdaBoost); Árvore de decisão; Máquina de Vetores de Suporte (SVM); Naive Bayes Gaussiano & Demográficas; Clínicas & 
+Acurácia; Precisão; Revocação; F1 Score; Matriz de confusão \\ \hline
+  
+\textbf{\cite{pourhomayoun2020predicting}} &
+  Redes Neurais Artificiais; Árvore de decisão; Floresta Aleatória*; K-vizinhos mais próximos (KNN); Regressão Logística; Máquina de Vetores de Suporte (SVM) &re
+  Demográficas; Clínicas &
+Acurácia; ROC-AUC;  Matriz de confusão \\ \hline
+  
+\textbf{\cite{zhao2020prediction}} &
+  Regressão Logística &
+  Clínicas &
+  ROC-AUC \\ \hline
+  
+\textbf{\cite{yadaw2020clinical}} &
+  eXtreme Gradient Boosting (XGBoost); Regressão Logística; Floresta Aleatória*; Máquina de Vetores de Suporte (SVM) &
+  Demográficas; Clínicas &
+  ROC-AUC \\ \hline
+  
+\textbf{\cite{cheng2020using}} &
+  Floresta Aleatória* &
+  Clínicas; Laboratoriais &
+  Revocação; Especificidade; Acurácia; ROC-AUC; Matriz de confusão\\ \hline
+  
+\textbf{\cite{assaf2020utilization}} &
+  Redes Neurais Artificiais; Floresta Aleatória*; Árvore de Decisão &
+  Clínicas &
+  Revocação; Especificidade; Acurácia; F1 Score; ROC-AUC;  Matriz de confusão\\ \hline
+  
+\textbf{\cite{gao2020machine}} &
+  Regressão Logística; Máquina de Vetores de Suporte (SVM); eXtreme Gradient Boosting (XGBoost); Redes Neurais Artificiais; K-vizinhos mais próximos (KNN) &
+  Clínicas; Laboratoriais &
+  Razão de probabiliadde positiva; Razão de probabilidade negativa; F1 score; ROC-AUC; Matriz de confusão\\ \hline
+  
+\textbf{\cite{chowdhury2020early}} &
+  eXtreme Gradient Boosting (XGBoost);  Regressão Logística &
+  Demográficas; Clínicas; Laboratoriais &
+  Revocação; Especificidade; Razão de probabiliadde positiva; Razão de probabilidade negativa; ROC-AUC; Matriz de confusão \\ \hline
+  
+\textbf{\cite{casiraghi2020explainable}} &
+  Floresta Aleatória* &
+  Radiológicas; Clínicas; Laboratoriais &
+  Revocação; Especificidade; Acurácia; F1 score; ROC-AUC; Matriz de confusão \\ \hline
+  
+\textbf{\cite{dun2020machine}} &
+  Floresta Aleatória* &
+  Demográficas; Clínicas &
+  -- \\ \hline
+\end{tabular}
+\end{table}
+
+As principais características utilizadas para treinamento são dados demográficos (\textit{e.g.}, idade, sexo e país de origem), presentes em 50\% dos trabalhos; dados clínicos (\textit{e.g.}, sintomas e comorbidades), presentes em 100\% dos trabalhos; dados laboratoriais (\textit{e.g.}, amostras de sangue), presentes em 40\% trabalhos, onde foi possível identificar a mínima saturação de O2 como característica chave. 
+Por fim, características radiológicas (\textit{e.g.}, imagens de radiografia) também aparecem como características de treinamento \cite{casiraghi2020explainable}.
+
+Nos modelos propostos e treinados, a quantidade de características usadas varia de 3 \cite{yadaw2020clinical} a 99 \cite{cheng2020using}. 
+Entretanto, foi possível observar que a idade e o sexo foram unânimes nos estudos que utilizaram de dados demográficos. 
+Além disso, é importante ressaltar que nos modelos que utilizam dados clínicos, em termos de sintomas e comorbidades, todos utilizaram características relacionadas a resfriados, como febre, tosse e dispnéia.
+
+Para entender quão bom um modelo preditivo é, existem métricas para avaliar o desempenho (ou generalização) de um método de aprendizagem de máquina \cite{amidi2020ml}. 
+As métricas mais encontradas nos trabalhos foram métricas obtidas através da matriz de confusão, sendo a AUC-ROC a mais utilizada (presente em 80\% dos trabalhos), seguida por acurácia, precisão, sensibilidade, especificidade e F1 \textit{score} (presentes em 70\% dos trabalhos).
+
+Os estudos mostram que modelos de aprendizagem de máquina conseguem prever chances de recuperação ou óbito com até 94\% de acurácia, com um F1 \textit{score} de 0.84 \cite{iwendi2020covid}. 
+Essa métrica (F1 \textit{score}) auxilia na verificação do quão bom e generalista o modelo é, visto que é uma média harmônica entre a precisão (verdadeiros que realmente eram verdadeiros) e a sensibilidade (proporção dos verdadeiros positivos entre todas as observações que realmente são positivas). 
+Isto demonstra a importância de outras métricas para avaliação dos modelos, além da acurácia, que é tipicamente a métrica mais utilizada em problemas de classificação binária.
+
+Os trabalhos relacionados na Tabela \ref{tab_trabalhos_relacionados} possuem uma limitação em comum: o grupo de pacientes utilizados para treino. Um modelo de previsão aplicado em um novo sistema de saúde,
+configuração ou país geralmente produz previsões que estão mal calibradas e podem precisar ser atualizadas antes que possam ser aplicadas com segurança nessa nova configuração. 
+Os mesmos métodos, com outras populações ou de outros sistemas de saúde, podem levar a resultados diferentes  \cite{assaf2020utilization, cheng2020using, zhao2020prediction, casiraghi2020explainable}. 
+
+Dados de vários países e sistemas de saúde podem permitir uma melhor compreensão da generalização e implementação de modelos de previsão em diferentes configurações e populações \cite{wynants2020prediction}. É com esta premissa que
+neste trabalho serão utilizados dados abertos, as mesmas técnicas de aprendizagem de máquina, avaliação e validação do estado da arte, porém aplicadas à população do Rio Grande do Sul.
+
+
